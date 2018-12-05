@@ -178,7 +178,7 @@ def clean_price(price):
         # иначе возвращаем NaN
         else:
             return np.nan
-    return price 
+    return float(price)
 
 # очистка стобца content_rating
 def clean_content_rating(content):
@@ -227,7 +227,8 @@ def clean_genres(genres):
 # функция считает разряд числа
 def digit(value):
     # масимум от value
-    get_max = max(int(value))
+    value = value.astype(int)
+    get_max = max(value)
     #переводим в строку
     int_to_str = str(get_max)
     # разряд числа равен кол-ву символов в строке
