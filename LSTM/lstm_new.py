@@ -5,6 +5,7 @@ Created on Mon Dec 17 17:25:52 2018
 @author: Xiaomi
 """
 
+import pandas as pd
 import numpy as np
 import sys
 sys.path.append("/")
@@ -14,6 +15,7 @@ from keras.preprocessing import sequence
 from keras.models import Sequential
 from keras.layers import Dense, Embedding
 from keras.layers import LSTM
+from keras.models import load_model
 
 # default url for negative positive and dictionary files
 positive, negative, dictionary = ('data/positive.csv','data/negative.csv','data/dictionary.csv')
@@ -28,14 +30,14 @@ encoder = encoder.encoder_twitter()
 # limit - # limit - upper limit for dataset (more quickly train)
 # save - overwrites files after encoding
 
-pos = encoder.encode(positive, save=True)
-neg = encoder.encode(negative, save=True)
+#pos = encoder.encode(positive, save=True)
+#neg = encoder.encode(negative, save=True)
 
 # and comment on the following 2 lines
 
 # read  positive and negative dataset
-#pos = pd.read_csv('data/positive_set.csv',sep=';',index_col='index')
-#neg = pd.read_csv('data/negative_set.csv',sep=';',index_col='index')
+pos = pd.read_csv('data/positive_set.csv',sep=';',index_col='index')
+neg = pd.read_csv('data/negative_set.csv',sep=';',index_col='index')
 
 # u can add your twitts in dataset
 # example
@@ -79,6 +81,8 @@ x_test = np.delete(x_test,40,axis=1)
 max_features = 200000
 
 batch_size = 64
+# u can load model without train and use predict
+#model = load_model('data/save_model.h5')
 
 model = Sequential()
 model.add(Embedding(max_features, 128))
@@ -99,9 +103,11 @@ model.fit(x_train, y_train,
 print(model.predict(x_test))
 
 #test = encoder.encode(data=twitts)
-#test = sequence.pad_sequences(test,maxlen = 40)
+#test = sequence.pad_sequences(test.values,maxlen = 40)
 #print(model.predict(test))
 
 # example decode
 #decode_array = encoder.decode(x_test)
 #print(decode_array)
+
+#model.save('data/save_model.h5')
